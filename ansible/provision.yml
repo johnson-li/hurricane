@@ -1,0 +1,23 @@
+---
+- hosts: all
+  sudo: True
+  roles:
+    - ANXS.hostname
+    - common
+
+- hosts: perf-www
+  sudo: True
+  roles:
+      - pylibs
+
+- hosts: perf-cache
+  sudo: True
+  roles:
+      - redis
+
+- hosts: perf-all
+  sudo: True
+  roles:
+      - pylibs
+      - redis
+

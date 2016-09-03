@@ -1,0 +1,71 @@
+---
+- name: Create default groups
+  group: name={{ item }}
+  tags: ['user']
+  with_items: sys_groups
+
+- name: Create users
+  user: name={{ item.user }} groups={{ item.group }} shell={{ item.shell | default("/bin/bash") }}
+  tags: ['user']
+  with_items: sys_users
+
+- name: Manage authorized_keys
+  authorized_key: user={{ item.user }}
+                  key="{{ lookup('file', 'user_pubkeys/' + item.user + '.pub') }}"
+  tags: ['user']
+  with_items: sys_users
+
+- name: Sudo user setup
+  template: src=sudoers.d/ansible.j2
+            dest=/etc/sudoers.d/ansible
+            validate='visudo -cf %s'
+            owner=root
+            group=root
+            mode=0440
+  tags: ['sudo']
+
+- name: Sudo env keep
+  template: src=sudoers.d/env_keep.j2
+            dest=/etc/sudoers.d/env_keep
+            validate='visudo -cf %s'
+            owner=root
+            group=root
+            mode=0440
+  tags: ['sudo']
+
+- name: apt-get update every day
+  apt: update_cache=yes cache_valid_time=86400
+
+- name: Install APT packages
+  apt: pkg={{ item }} state=present
+  with_items: apt_pkgs
+
+- name: Cloning  oh-my-zsh
+  git:
+      repo=https://github.com/robbyrussell/oh-my-zsh
+      dest=~/.oh-my-zsh
+  register: cloning
+  become_user: "{{ sys_users[0].user }}"
+
+- name: Creating new .zshrc
+  copy:
+      src="~/.oh-my-zsh/templates/zshrc.zsh-template"
+      dest=~/.zshrc
+  when: cloning|success
+  become_user: "{{ sys_users[0].user }}"
+
+- name: Link to supervisorctl
+  file: src=/usr/bin/supervisorctl dest=/usr/bin/supdctl state=link
+
+- name: Set timezone to UTC
+  copy: content='Etc/UTC'
+        dest=/etc/timezone
+        mode=0644
+  notify:
+    - update timezone
+
+- name: Set limits
+  template: src=limits.conf.j2 dest=/etc/security/limits.conf
+
+- name: Create source directory for third-party software
+  file: path=/opt/src owner=root group=root state=directory

@@ -1,0 +1,113 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vars/aws.yml
+
+  tasks:
+  # Security groups
+  - name: Setup secruity groups
+    ec2_group:
+      name: "{{ item.name }}"
+      description: "{{ item.desc }}"
+      vpc_id: "{{ vpc_id }}"
+      region: "{{ region }}"
+      rules: "{{ item.rules }}"
+    with_items: security_group
+
+  # EC2 Instances
+  - name: Launch instances 
+    ec2:
+      key_name: "{{ default_key_name }}"
+      instance_type: "{{ item.instance_type }}"
+      image: "{{ item.ami }}"
+      wait: yes
+      group: "{{ item.security_groups }}"
+      exact_count: 1
+      instance_tags:
+        Name: "{{ item.name }}"
+        env: "{{ env }}"
+      count_tag:
+        Name: "{{ item.name }}"
+      vpc_subnet_id: "{{ subnet_id }}"
+      assign_public_ip: yes
+      region: "{{ region }}"
+    with_items: ec2_instances
+    register: launched_instances
+    tags: ['ec2']
+
+  - name: Setup EC2 DNS in private zone
+    route53:
+      command: create
+      zone: "{{ private_zone }}"
+      record: "{{ item.item.name }}.{{ private_zone }}"
+      type: A
+      ttl: 30
+      private_zone: yes
+      overwrite: yes
+      value: "{{ item.tagged_instances[0].private_ip }}"
+    with_items: launched_instances.results
+    tags: ['route53']
+
+  - name: Setup EC2 DNS in public zone
+    route53:
+      command: create
+      zone: "{{ public_zone }}"
+      record: "{{ item.item.name }}.{{ public_zone }}"
+      type: A
+      ttl: 30
+      private_zone: no
+      overwrite: yes
+      value: "{{ item.tagged_instances[0].public_ip }}"
+    with_items: launched_instances.results
+    tags: ['route53']
+
+  # # Elastic Cache
+  # - elasticache:
+  #     name: "{{ item.name }}"
+  #     state: present
+  #     engine: redis
+  #     node_type: "{{ item.node_type }}"
+  #     num_nodes: 1
+  #     cache_port: 6379
+  #     cache_subnet_group: "{{ cache_subnet }}"
+  #     security_group_ids: ['perf']
+  #     zone: "{{ default_az }}"
+  #     region: "{{ region }}"
+  #   with_items: cache_instances
+  #   register: launched_cache
+  #   tags: ['cache']
+
+  # - debug: var=launched_cache
+
+  # - name: Setup Cache DNS in private zone
+  #   route53:
+  #     command: create
+  #     zone: "{{ private_zone }}"
+  #     record: "{{ item.item.name }}.{{ private_zone }}"
+  #     type: CNAME
+  #     ttl: 30
+  #     private_zone: yes
+  #     overwrite: yes
+  #     value: "{{ item.tagged_instances[0].endpoint }}"
+  #   with_items: launched_cache.results
+  #   tags: ['route53']
+
+  # RDS
+  # - rds:
+  #     command: restore
+  #     instance_name: "{{ item.name }}"
+  #     instance_type: "{{ item.instance_type }}"
+  #     subnet: "{{ rds_subnet }}"
+  #     region: "{{ region }}"
+  #     snapshot: "{{ item.snapshot }}"
+  #     tags:
+  #       Name: "{{ item.name }}"
+  #       env: "{{ env }}"
+  #   with_items: rds_instances
+  #   tags: ['rds']
+  #   register: launched_rds
+
+  # - debug: var=launched_rds
+  #   tags: ['rds']

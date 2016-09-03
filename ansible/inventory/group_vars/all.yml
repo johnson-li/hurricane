@@ -1,0 +1,38 @@
+---
+env: perf
+sys_groups:
+  - admin
+  - staff
+
+sys_users:
+  - user: johnson
+    group: admin 
+    shell: /usr/bin/zsh
+  
+sudo_users:
+  - {name: "%admin", nopasswd: yes}
+
+apt_pkgs:
+  - build-essential
+  - git-core
+  - ntp
+  - sysstat
+  - supervisor
+  - zsh
+  - redis-tools
+
+python_apt_dep:
+  - python-dev
+  - python-pip
+
+pip_pkgs:
+  - name: gunicorn
+    version: 19.4.1
+
+  - name: ipython
+    version: 4.0.1
+
+keep_envs:
+    - PYTHONPATH
+    - SSH_AUTH_SOCK
+    - ENV_NAME

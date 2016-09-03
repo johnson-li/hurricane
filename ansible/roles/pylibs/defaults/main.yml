@@ -1,0 +1,14 @@
+---
+python_apt_dep:
+  - python-dev
+  - python-pip
+  - python-imaging
+  - python-pandas
+  - python-psycopg2
+  - mysql-client
+  - libmysqlclient-dev
+
+pip_pkgs:
+  - name: gevent
+    version: 1.0.1
+

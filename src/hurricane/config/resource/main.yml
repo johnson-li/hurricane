@@ -1,0 +1,10 @@
+---
+www: None
+
+webrpc:
+  module: webrpc.impl.local.client
+  class: Client
+
+db:
+  module: db.impl.sqlite.client
+  class: Client

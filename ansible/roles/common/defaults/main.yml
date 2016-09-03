@@ -1,0 +1,3 @@
+---
+nofile_soft_limit: 32768
+nofile_hard_limit: 65536

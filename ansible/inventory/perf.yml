@@ -1,0 +1,9 @@
+[perf-www]
+perf-www0.glow-dev.com
+
+[perf-cache]
+perf-cache0.glow-dev.com
+
+[perf:children]
+perf-www
+perf-cache
