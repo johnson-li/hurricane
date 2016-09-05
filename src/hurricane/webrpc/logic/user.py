@@ -2,7 +2,7 @@ import hurricane.config.db_config
 import hurricane.db.api.user
 import hurricane.utils.logic
 
-db_client = config.db_config.get_client()
+db_client = hurricane.config.db_config.get_client()
 
 
 def get_user(user_id):

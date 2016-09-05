@@ -1,8 +1,7 @@
-import logging
-
 import hurricane.db.impl.sqlite
+import hurricane.logging
 
-logger = logging.getLogger(__name__)
+logger = hurricane.logging.get_logger(__name__)
 
 
 class Client:
@@ -13,7 +12,7 @@ class Client:
         cursor = self.conn.cursor()
         where_clause = 'where {}'.format(str(db_filter)) if db_filter else ''
         sql = 'select * from {} {}'.format('user', where_clause)
-        logging.warning(sql)
+        logger.info(sql)
         cursor.execute(sql)
         users = cursor.fetchall()
         columns = [i[0] for i in cursor.description]

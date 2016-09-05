@@ -1,9 +1,10 @@
 import inspect
-import logging
 import os
 import sqlite3
 
-logger = logging.getLogger(__name__)
+import hurricane.logging
+
+logger = hurricane.logging.get_logger(__name__)
 
 current_dir = os.path.dirname(inspect.getfile(inspect.currentframe()))
 _db_file = '{}/sqlite.db'.format(current_dir)
