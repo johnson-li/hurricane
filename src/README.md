@@ -41,7 +41,7 @@ The following lists all kinds of configurable parts that the project supports or
     - [ ] flask with gevent and gunicorn
 - webrpc server
     - [x] local call
-    - [ ] flask default
+    - [x] flask default
     - [ ] flask with gevent
     - [ ] flask with gevent and gunicorn
 - network protocol between www and webrpc
@@ -49,8 +49,8 @@ The following lists all kinds of configurable parts that the project supports or
     - [ ] HTTP/2
     - [ ] TCP
 - data expression
-    - [x] original data
-    - [ ] msgpack
+    - [x] json
+    - [x] msgpack
     - [ ] protobuf
 - db layer cache
     - [x] no cache
