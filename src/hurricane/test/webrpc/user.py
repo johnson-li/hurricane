@@ -11,5 +11,11 @@ class TestUserLogic(unittest.TestCase):
 
     def test_user(self):
         info = hurricane.webrpc.api.user.create_user(self.client, 'johnson', '1@j.com', 'password')
-        user = hurricane.webrpc.api.user.get_user(self.client, info['user_id'])[0]
+        user = hurricane.webrpc.api.user.get_user(self.client, info['user_id'])
         self.assertEqual(user['name'], 'johnson')
+
+    def test_update_user(self):
+        info = hurricane.webrpc.api.user.create_user(self.client, 'johnson', '2@j.com', 'password')
+        hurricane.webrpc.api.user.update_user(self.client, info['user_id'], name='haha')
+        user = hurricane.webrpc.api.user.get_user(self.client, info['user_id'])
+        self.assertEqual(user['name'], 'haha')
