@@ -2,7 +2,7 @@ import functools
 import inspect
 import json
 
-from flask import Flask, request, make_response
+from flask import Flask, request
 
 import hurricane.www.logic.user
 

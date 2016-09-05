@@ -7,10 +7,7 @@ func_map = {func.__name__: func for func in
              not func_name.startswith('_')] if inspect.isfunction(func)}
 
 
-class Client:
-    def __init__(self):
-        pass
-
+class Client(object):
     def __getattr__(self, item):
         func = func_map.get(item, None)
         if func:

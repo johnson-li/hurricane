@@ -1,6 +1,8 @@
 import unittest
 
 import hurricane.webrpc.api.user
+import hurricane.webrpc.impl.flask.client
+import hurricane.webrpc.impl.flask.server
 import hurricane.webrpc.impl.local.client
 
 

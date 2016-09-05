@@ -1,10 +1,14 @@
 ---
-www: None
+www:
+  codec: json
+  server: flask
 
 webrpc:
-  module: hurricane.webrpc.impl.local.client
-  class: Client
+  client_module: hurricane.webrpc.impl.flask.client
+  client_class: Client
+  codec: json
+  server_module: hurricane.webrpc.imple.flask.server
 
 db:
-  module: hurricane.db.impl.sqlite.client
-  class: Client
+  client_module: hurricane.db.impl.sqlite.client
+  client_class: Client

@@ -13,7 +13,7 @@ class Client:
 
     @staticmethod
     def wrap_val(val):
-        if isinstance(val, str):
+        if isinstance(val, (str, unicode)):
             return "'{}'".format(val)
         else:
             return val
@@ -43,6 +43,7 @@ class Client:
         keys = update_data.keys()
         vals = [Client.wrap_val(update_data[key]) for key in keys]
         sql = 'insert into {}({}) VALUES ({})'.format(table, ', '.join(keys), ', '.join(vals))
+        logger.info(sql)
         cursor.execute(sql)
         self.conn.commit()
         return cursor.lastrowid
