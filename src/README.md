@@ -33,7 +33,7 @@ The following lists all kinds of configurable parts that the project supports or
 
 - db vendor
     - [x] sqlite3
-    - [ ] mysql
+    - [x] mysql
     - [ ] mongodb
 - www server
     - [x] flask default
