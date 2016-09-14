@@ -37,12 +37,12 @@ The following lists all kinds of configurable parts that the project supports or
     - [ ] mongodb
 - www server
     - [x] flask default
-    - [ ] flask with gevent
+    - [x] flask with gevent
     - [ ] flask with gevent and gunicorn
 - webrpc server
     - [x] local call
     - [x] flask default
-    - [ ] flask with gevent
+    - [x] flask with gevent
     - [ ] flask with gevent and gunicorn
 - network protocol between www and webrpc
     - [x] HTTP/1.x
