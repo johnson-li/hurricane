@@ -9,8 +9,8 @@ def get_client():
     module_str = webrpc_conf['client_module']
     class_str = webrpc_conf['client_class']
 
-    if not module_str.startswith('webrpc.impl.'):
-        raise AttributeError('webrpc client should be located in webrpc.impl: ' + module_str)
+    if not module_str.startswith('hurricane.webrpc.impl.'):
+        raise AttributeError('webrpc client should be located in hurricane.webrpc.impl: ' + module_str)
 
     module = importlib.import_module(module_str)
     cls = getattr(module, class_str)
