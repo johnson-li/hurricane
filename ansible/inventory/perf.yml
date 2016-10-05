@@ -1,9 +1,6 @@
-[perf-www]
-perf-www0.glow-dev.com
-
-[perf-cache]
-perf-cache0.glow-dev.com
+[perf-all]
+glow-aws ansible_port=22 ansible_user=ubuntu ansible_host=ec2-52-78-37-99.ap-northeast-2.compute.amazonaws.com ansible_private_key_file=~/.ssh/id_rsa 
 
 [perf:children]
-perf-www
-perf-cache
+perf-all
+

@@ -1,0 +1,11 @@
+- name: Create source directory for my code
+  file: path=/srv/checkout owner={{ sys_users[0].user }} group={{ sys_users[0].group }} state=directory
+
+- name: Sync code
+  git:
+      repo=https://github.com/johnson-li/hurricane
+      dest=/srv/checkout
+      clone=yes
+      update=yes
+  become_user: "{{ sys_users[0].user }}"
+

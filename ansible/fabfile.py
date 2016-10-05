@@ -64,6 +64,14 @@ def provision(limit=None, tags=None, dev=False, **extra_vars):
                         tags=tags, limit=limit, extra_vars=extra_vars)
 
 @task
+def sync_code(limit=None, tags=None, dev=False, **extra_vars):
+    """
+    Syns code via github
+    """
+    ansible_playbook('sync-code.yml', 'inventory/perf-dev.yml' if dev else 'inventory/perf.yml',
+                        tags=tags, limit=limit, extra_vars=extra_vars)
+
+@task
 def aws_setup(tags=None, rds=True):
     '''Setup infrastructure on AWS including secruity group, ec2 instances etc.
 
